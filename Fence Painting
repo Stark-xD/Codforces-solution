@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int64_t INF64 = int64_t(2e18) + 5;
+int INF = int(1e9) + 5;
+
+// Problem C
+
+void solve() {
+    int N, M;
+    cin >> N >> M;
+
+    vector<int> A(N), B(N), painters(M);
+    for (auto &a : A)
+        cin >> a;
+    for (auto &b : B)
+        cin >> b;
+    for (auto &m : painters)
+        cin >> m;
+
+    vector<vector<int>> wants(N + 1), needs(N + 1);
+
+    for (int i = 0; i < N; i++) {
+        wants[B[i]].push_back(i);
+
+        if (B[i] != A[i])
+            needs[B[i]].push_back(i);
+    } 
+
+    if (wants[painters.back()].empty()) {
+        cout << "NO\n";
+        return;
+    }
+
+    vector<int> ans(M);
+    for (int i = M - 1; i >= 0; i--) {
+        if (!needs[painters[i]].empty()) {
+            ans[i] = needs[painters[i]].back();
+            needs[painters[i]].pop_back();
+        } else if (!wants[painters[i]].empty()) {
+            ans[i] = wants[painters[i]].back();
+        } else {
+            ans [i] = ans.back();
+        }
+    }
+
+    for (int i = 0; i <= N; i++) {
+        if (!needs[i].empty()) {
+            cout << "NO\n";
+            return;
+        }
+    }
+
+    cout << "YES" << endl;
+    for (auto it : ans)
+        cout << it + 1<< " ";
+    cout << endl;
+
+}
+
+int main() {
+    
+    ios::sync_with_stdio(false);
+    cin.tie(0), cout.tie(0);
+
+    #ifndef ONLINE_JUDGE
+        freopen("input.txt", "r", stdin);
+        freopen("output1.txt", "w", stdout);
+    #endif  
+    
+
+    int testcases;
+    cin >> testcases;
+
+    while(testcases--) {
+        solve();
+    }
+}
